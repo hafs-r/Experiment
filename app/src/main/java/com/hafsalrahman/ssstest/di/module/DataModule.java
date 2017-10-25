@@ -12,6 +12,9 @@ import android.preference.PreferenceManager;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hafsalrahman.ssstest.data.local.AppLocalDataStore;
+import com.hafsalrahman.ssstest.data.local.DataBaseSource;
+import com.hafsalrahman.ssstest.data.remote.AppRemoteDataStore;
 
 import javax.inject.Singleton;
 
@@ -77,6 +80,19 @@ public class DataModule {
     }
 
 
+    @Provides
+    @Singleton
+    AppLocalDataStore provideLocalDataStore(DataBaseSource dbSource) {
+        AppLocalDataStore lds = new AppLocalDataStore(dbSource);
+        return lds;
+    }
+
+    @Provides
+    @Singleton
+    AppRemoteDataStore provideRemoteDataStore(Retrofit retrofit) {
+        AppRemoteDataStore rds = new AppRemoteDataStore(retrofit);
+        return rds;
+    }
 
 
 }

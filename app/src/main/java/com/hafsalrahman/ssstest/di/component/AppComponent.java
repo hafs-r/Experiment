@@ -1,8 +1,11 @@
 package com.hafsalrahman.ssstest.di.component;
 
 
+
+import com.hafsalrahman.ssstest.data.AppRepository;
 import com.hafsalrahman.ssstest.di.module.AppModule;
 import com.hafsalrahman.ssstest.di.module.DataModule;
+import com.hafsalrahman.ssstest.di.module.UtilModule;
 
 import javax.inject.Singleton;
 
@@ -13,8 +16,9 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {AppModule.class, DataModule.class})
+@Component(modules = {AppModule.class, DataModule.class, UtilModule.class})
 public interface AppComponent {
 
+    void inject(AppRepository appRepository);
 
 }
