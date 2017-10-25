@@ -1,11 +1,8 @@
 package com.hafsalrahman.ssstest.di.module;
-
 import android.app.Application;
-
 import com.hafsalrahman.ssstest.utils.NetUtils;
 
 import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 

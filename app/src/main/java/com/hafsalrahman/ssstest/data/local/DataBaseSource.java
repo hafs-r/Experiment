@@ -13,5 +13,6 @@ import com.hafsalrahman.ssstest.data.remote.models.User;
 
 @Database(entities = {User.class}, version = 1)
 public abstract class DataBaseSource extends RoomDatabase {
+
     public abstract UserDao getUserDao();
 }

@@ -5,6 +5,10 @@ package com.hafsalrahman.ssstest.di.module;
  */
 
 import android.app.Application;
+import android.arch.persistence.db.SupportSQLiteOpenHelper;
+import android.arch.persistence.room.DatabaseConfiguration;
+import android.arch.persistence.room.InvalidationTracker;
+import android.arch.persistence.room.Room;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -12,8 +16,10 @@ import android.preference.PreferenceManager;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hafsalrahman.ssstest.BuildConfig;
 import com.hafsalrahman.ssstest.data.local.AppLocalDataStore;
 import com.hafsalrahman.ssstest.data.local.DataBaseSource;
+
 import com.hafsalrahman.ssstest.data.remote.AppRemoteDataStore;
 
 import javax.inject.Singleton;
@@ -82,11 +88,19 @@ public class DataModule {
 
     @Provides
     @Singleton
+    DataBaseSource providesDataSource(Application application) {
+       return Room.databaseBuilder(application, DataBaseSource.class, BuildConfig.DB_NAME).build();
+    }
+
+    //local db wrapper
+    @Provides
+    @Singleton
     AppLocalDataStore provideLocalDataStore(DataBaseSource dbSource) {
         AppLocalDataStore lds = new AppLocalDataStore(dbSource);
         return lds;
     }
 
+    //remote api wrapper
     @Provides
     @Singleton
     AppRemoteDataStore provideRemoteDataStore(Retrofit retrofit) {
