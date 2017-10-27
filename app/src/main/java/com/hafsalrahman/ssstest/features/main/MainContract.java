@@ -2,7 +2,7 @@ package com.hafsalrahman.ssstest.features.main;
 
 import com.hafsalrahman.ssstest.base.BasePresenter;
 import com.hafsalrahman.ssstest.base.BaseView;
-import com.hafsalrahman.ssstest.data.local.models.User;
+import com.hafsalrahman.ssstest.data.local.models.LocalUser;
 
 import java.util.List;
 
@@ -14,9 +14,11 @@ public class MainContract {
 
     interface View extends BaseView {
 
-        void showUsers(List<User> properties);
+        void showUsers(List<LocalUser> properties);
 
         void showError(String message);
+
+        void showInfo(int message);
 
 
     }

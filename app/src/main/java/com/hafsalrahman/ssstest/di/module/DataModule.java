@@ -5,22 +5,16 @@ package com.hafsalrahman.ssstest.di.module;
  */
 
 import android.app.Application;
-import android.arch.persistence.db.SupportSQLiteOpenHelper;
-import android.arch.persistence.room.DatabaseConfiguration;
-import android.arch.persistence.room.InvalidationTracker;
 import android.arch.persistence.room.Room;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.hafsalrahman.ssstest.BuildConfig;
+import com.hafsalrahman.ssstest.data.AppRepository;
 import com.hafsalrahman.ssstest.data.local.AppLocalDataStore;
 import com.hafsalrahman.ssstest.data.local.DataBaseSource;
-
 import com.hafsalrahman.ssstest.data.remote.AppRemoteDataStore;
+import com.hafsalrahman.ssstest.utils.NetUtils;
 
 import javax.inject.Singleton;
 
@@ -30,15 +24,14 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 
 @Module
 public class DataModule {
-    String mBaseUrl;
 
-    public DataModule(String mBaseUrl) {
-        this.mBaseUrl = mBaseUrl;
+
+    public DataModule() {
     }
 
     @Provides
@@ -51,17 +44,7 @@ public class DataModule {
     @Singleton
     Cache provideHttpCache(Application application) {
         int cacheSize = 10 * 1024 * 1024;
-        Cache cache = new Cache(application.getCacheDir(), cacheSize);
-        return cache;
-    }
-
-
-    @Provides
-    @Singleton
-    Gson provideGson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-        return gsonBuilder.create();
+        return new Cache(application.getCacheDir(), cacheSize);
     }
 
     @Provides
@@ -73,40 +56,52 @@ public class DataModule {
         return client.build();
     }
 
+
     @Provides
     @Singleton
-    Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(mBaseUrl)
+    Retrofit provideRetrofit(OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .baseUrl(BuildConfig.BASEURL)
                 .client(okHttpClient)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-        return retrofit;
+
+    }
+
+    @Provides
+    @Singleton
+    NetUtils proviveInternetUtil(Application application) {
+        return new NetUtils(application);
     }
 
 
     @Provides
     @Singleton
     DataBaseSource providesDataSource(Application application) {
-       return Room.databaseBuilder(application, DataBaseSource.class, BuildConfig.DB_NAME).build();
+        return Room.databaseBuilder(application.getApplicationContext(), DataBaseSource.class, BuildConfig.DB_NAME).build();
     }
 
     //local db wrapper
     @Provides
     @Singleton
     AppLocalDataStore provideLocalDataStore(DataBaseSource dbSource) {
-        AppLocalDataStore lds = new AppLocalDataStore(dbSource);
-        return lds;
+        return new AppLocalDataStore(dbSource);
     }
 
     //remote api wrapper
     @Provides
     @Singleton
     AppRemoteDataStore provideRemoteDataStore(Retrofit retrofit) {
-        AppRemoteDataStore rds = new AppRemoteDataStore(retrofit);
-        return rds;
+        return new AppRemoteDataStore(retrofit);
     }
 
+    //remote api wrapper
+    @Provides
+    @Singleton
+    AppRepository provideDataStore(AppRemoteDataStore appRemoteDataStore, AppLocalDataStore appLocalDataStore, NetUtils pNetUtil) {
+
+        return new AppRepository(appRemoteDataStore, appLocalDataStore, pNetUtil);
+    }
 
 }

@@ -3,7 +3,7 @@ package com.hafsalrahman.ssstest.data;
 import android.util.Log;
 
 import com.hafsalrahman.ssstest.data.local.AppLocalDataStore;
-import com.hafsalrahman.ssstest.data.local.models.User;
+import com.hafsalrahman.ssstest.data.local.models.LocalUser;
 import com.hafsalrahman.ssstest.data.remote.AppRemoteDataStore;
 import com.hafsalrahman.ssstest.data.remote.UsersResponse;
 import com.hafsalrahman.ssstest.utils.NetUtils;
@@ -37,24 +37,23 @@ public class AppRepository implements AppDataStore {
     }
 
     @Override
-    public Single<List<User>> getUsers() {
-        Single<List<User>> response = null;
+    public Single<List<LocalUser>> getUsers() {
+        Single<List<LocalUser>> response = null;
 
         if (mNetUtil.isNetworkAvailable()) {
             response = mAppRemoteDataStore.getUsers()
-                    .map(new Function<UsersResponse, List<com.hafsalrahman.ssstest.data.local.models.User>>() {
+                    .map(new Function<UsersResponse, List<LocalUser>>() {
                         @Override
-                        public List<com.hafsalrahman.ssstest.data.local.models.User> apply(UsersResponse apiUsers) throws Exception {
+                        public List<LocalUser> apply(UsersResponse apiUsers) throws Exception {
                             return UserUtil.convertApiUserListToUserList(apiUsers);
-                        };
-                    }).doOnSuccess(new Consumer<List<User>>() {
+                        }
+                    }).doOnSuccess(new Consumer<List<LocalUser>>() {
                         @Override
-                        public void accept(@NonNull List<User> users)  {
+                        public void accept(@NonNull List<LocalUser> localUsers) {
                             try {
-                                mAppLocalDataStore.insertUsers(users);
-                            }catch (Exception e)
-                            {
-                                Log.e(e.getMessage(),"");
+                                mAppLocalDataStore.insertUsers(localUsers);
+                            } catch (Exception e) {
+                                Log.e(e.getMessage(), "");
                             }
                         }
                     });

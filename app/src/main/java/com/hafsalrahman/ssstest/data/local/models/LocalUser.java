@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
  */
 
 @Entity(tableName = "users")
-public class User {
+public class LocalUser {
 
     @PrimaryKey
     @ColumnInfo(name = "id_info")
@@ -33,7 +33,7 @@ public class User {
     @ColumnInfo(name = "thumbnail")
     public String thumbnail;
 
-    public User(String idInfo, String title, String firstName, String lastName, String gender, String thumbnail) {
+    public LocalUser(@NonNull String idInfo, String title, String firstName, String lastName, String gender, String thumbnail) {
 
         this.idInfo = idInfo;
         this.title = title;
@@ -47,7 +47,7 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        return this.idInfo.equals(((User) obj).idInfo);
+        return this.idInfo.equals(((LocalUser) obj).idInfo);
 
     }
 }

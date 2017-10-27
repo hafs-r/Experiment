@@ -1,10 +1,6 @@
 package com.hafsalrahman.ssstest.data;
 
 
-
-import com.hafsalrahman.ssstest.data.remote.UsersResponse;
-
-
 import io.reactivex.Single;
 
 

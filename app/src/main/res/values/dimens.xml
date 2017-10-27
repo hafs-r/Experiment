@@ -1,3 +1,10 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="small_padding">4dp</dimen>
+
+    <dimen name="text_size_l">17sp</dimen>
+    <dimen name="text_size_m">14sp</dimen>
+    <dimen name="image_height">100dp</dimen>
+
 </resources>

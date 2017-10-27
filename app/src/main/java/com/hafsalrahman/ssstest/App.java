@@ -25,7 +25,7 @@ public class App extends Application {
 
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
-                .dataModule(new DataModule(BuildConfig.BASEURL))
+                .dataModule(new DataModule())
                 .build();
     }
 

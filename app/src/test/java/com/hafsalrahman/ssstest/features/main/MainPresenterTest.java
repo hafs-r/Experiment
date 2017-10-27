@@ -4,7 +4,6 @@ import com.hafsalrahman.ssstest.data.AppRepository;
 import com.hafsalrahman.ssstest.data.DataTestUtil;
 import com.hafsalrahman.ssstest.data.local.models.LocalUser;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -35,14 +34,14 @@ public class MainPresenterTest {
     private MainPresenter mMainPresenter;
 
 
-    private  List<LocalUser> USERS;
+    private List<LocalUser> USERS;
 
     @Before
     public void setUp() throws Exception {
         // inject the mocks in the test the initMocks method needs to be called.
         MockitoAnnotations.initMocks(this);
 
-        USERS=new DataTestUtil().getDummyUsers();
+        USERS = new DataTestUtil().getDummyUsers();
         when(mAppRepository.getUsers()).thenReturn(Single.create(new SingleOnSubscribe<List<LocalUser>>() {
 
             @Override
@@ -71,9 +70,5 @@ public class MainPresenterTest {
         mAppRepository.getUsers().test().assertNoErrors().assertValue(USERS);
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
 
 }

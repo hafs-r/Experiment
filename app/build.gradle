@@ -22,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -30,13 +34,14 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxAndroidVersion"
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
     compile "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion"
     compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofitVersion"
 
-    compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion"
+    compile "com.squareup.okio:okio:$rootProject.ext.okioVersion"
+    compile "com.squareup.moshi:moshi:$rootProject.ext.moshiVersion"
+    compile "com.squareup.retrofit2:converter-moshi:$rootProject.ext.moshiConvertVersion"
     compile "com.squareup.retrofit2:converter-scalars:$rootProject.ext.retrofitVersion"
 
     compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttpVersion"
@@ -48,12 +53,25 @@ dependencies {
     compile "com.google.dagger:dagger:$rootProject.ext.daggerVersion"
     compile "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
 
-
     compile "android.arch.persistence.room:runtime:$rootProject.ext.roomVersion"
+    compile "android.arch.persistence.room:rxjava2:$rootProject.ext.roomVersion"
+    compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayout"
 
     // Dependencies for local unit tests
-    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion"
+    testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
+    testCompile "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
 
+
+    // Android Testing Support Library's runner and rules
+    androidTestCompile "com.android.support.test:runner:$rootProject.ext.runnerVersion"
+    androidTestCompile "com.android.support.test:rules:$rootProject.ext.rulesVersion"
+
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.ext.roomVersion"
     testCompile "junit:junit:$rootProject.ext.junitVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
+
+    configurations.all {
+        resolutionStrategy.force "com.android.support:support-annotations:$rootProject.ext.supportLibraryVersion"
+    }
 }

@@ -1,11 +1,8 @@
 package com.hafsalrahman.ssstest.data.remote;
 
 import com.hafsalrahman.ssstest.data.AppDataStore;
-import io.reactivex.Single;
 
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Single;
 import retrofit2.Retrofit;
 
 /**
@@ -19,11 +16,11 @@ public class AppRemoteDataStore implements AppDataStore {
 
 
     public AppRemoteDataStore(Retrofit retrofit) {
-        this.retrofit=retrofit;
+        this.retrofit = retrofit;
     }
 
     @Override
     public Single<UsersResponse> getUsers() {
-      return retrofit.create(UserService.class).getUserList();
+        return retrofit.create(UserService.class).getUserList();
     }
 }

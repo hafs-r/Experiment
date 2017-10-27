@@ -2,7 +2,7 @@ package com.hafsalrahman.ssstest.data.remote;
 
 
 import com.hafsalrahman.ssstest.data.remote.models.Info;
-import com.hafsalrahman.ssstest.data.remote.models.User;
+import com.hafsalrahman.ssstest.data.remote.models.RemoteUser;
 
 import java.util.List;
 
@@ -12,16 +12,14 @@ import java.util.List;
 
 public class UsersResponse {
 
-    public final List<User> results;
+    public final List<RemoteUser> results;
 
     public final Info info;
 
-    public UsersResponse(List<User> results, Info info) {
+    public UsersResponse(List<RemoteUser> results, Info info) {
         this.results = results;
         this.info = info;
     }
-
-
 
 
 }

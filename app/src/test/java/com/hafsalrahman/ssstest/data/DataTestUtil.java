@@ -35,10 +35,9 @@ public class DataTestUtil {
         Login login = new Login("username", "password", "salt", "$%^&%^RTU&^",
                 "GJFFJTRTUR&^R&^R&", "GYTRU^TRYDEUTU^T&R&^T");
         Picture picture = new Picture("large", "medium", "small");
-        RemoteUser rUser = new RemoteUser("male", name, location, "first@xyz.com",
-                login, "dob", "10/27/17", "+123456615156", "+13245261661", id, picture, "nat");
 
-        return rUser;
+        return new RemoteUser("male", name, location, "first@xyz.com",
+                login, "dob", "10/27/17", "+123456615156", "+13245261661", id, picture, "nat");
     }
 
     public List<LocalUser> getDummyUsers() {
@@ -62,8 +61,6 @@ public class DataTestUtil {
         info.seed = "seed";
         info.version = "1";
 
-        UsersResponse response = new UsersResponse(getDummyUsersRemote(), info);
-
-        return response;
+        return new UsersResponse(getDummyUsersRemote(), info);
     }
 }

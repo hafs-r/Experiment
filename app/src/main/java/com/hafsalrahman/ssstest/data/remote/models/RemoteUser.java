@@ -5,7 +5,7 @@ package com.hafsalrahman.ssstest.data.remote.models;
  * Created by hafsal on 10/24/17.
  */
 
-public class User {
+public class RemoteUser {
 
     public final String gender;
 
@@ -23,7 +23,7 @@ public class User {
     public final Picture picture;
     public final String nat;
 
-    public User(String gender, Name name, Location location, String email, Login login, String dob, String registered, String phone, String cell, Id id, Picture picture, String nat) {
+    public RemoteUser(String gender, Name name, Location location, String email, Login login, String dob, String registered, String phone, String cell, Id id, Picture picture, String nat) {
         this.gender = gender;
         this.name = name;
         this.location = location;
@@ -41,7 +41,7 @@ public class User {
 
     @Override
     public String toString() {
-        return name+" "+id.toString();
+        return name + " " + id.toString();
     }
 }
 
