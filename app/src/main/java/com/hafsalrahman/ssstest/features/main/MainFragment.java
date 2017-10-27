@@ -1,5 +1,6 @@
 package com.hafsalrahman.ssstest.features.main;
 
+
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,7 @@ public class MainFragment extends Fragment implements MainContract.View {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+
         mRecyclerView = (RecyclerView) root.findViewById(R.id.users_recycler);
         mSwipeRefresh = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -1,20 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    def Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
     defaultConfig {
         applicationId "com.hafsalrahman.ssstest"
-        minSdkVersion 19
-        targetSdkVersion 26
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "int", "LIMIT", "100"
-        buildConfigField "String", "BASEURL", "\"https://randomuser.me/\""
-        buildConfigField "int", "CACHETIME", "432000" // 5days
-        buildConfigField "String", "DB_NAME", "\"sss_db\"" //
+        buildConfigField "String", "BASEURL", properties.getProperty("baseurl", "")
+        buildConfigField "String", "DB_NAME", properties.getProperty("localdb", "")
     }
     buildTypes {
         release {
@@ -26,6 +28,8 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+
+
 }
 
 dependencies {
@@ -60,7 +64,6 @@ dependencies {
     // Dependencies for local unit tests
     testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
     testCompile "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
-
 
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:$rootProject.ext.runnerVersion"

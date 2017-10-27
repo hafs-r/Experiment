@@ -16,7 +16,11 @@ import com.hafsalrahman.ssstest.data.local.DataBaseSource;
 import com.hafsalrahman.ssstest.data.remote.AppRemoteDataStore;
 import com.hafsalrahman.ssstest.utils.NetUtils;
 
+import java.security.cert.CertificateException;
+
 import javax.inject.Singleton;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.X509TrustManager;
 
 import dagger.Module;
 import dagger.Provides;
@@ -50,7 +54,6 @@ public class DataModule {
     @Provides
     @Singleton
     OkHttpClient provideOkhttpClient(Cache cache) {
-
         OkHttpClient.Builder client = new OkHttpClient.Builder();
         client.cache(cache);
         return client.build();
@@ -96,7 +99,7 @@ public class DataModule {
         return new AppRemoteDataStore(retrofit);
     }
 
-    //remote api wrapper
+    //data api wrapper
     @Provides
     @Singleton
     AppRepository provideDataStore(AppRemoteDataStore appRemoteDataStore, AppLocalDataStore appLocalDataStore, NetUtils pNetUtil) {

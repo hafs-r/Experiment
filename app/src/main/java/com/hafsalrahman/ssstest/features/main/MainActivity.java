@@ -4,13 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-
 import com.hafsalrahman.ssstest.App;
 import com.hafsalrahman.ssstest.R;
 import com.hafsalrahman.ssstest.data.AppRepository;
-
 import javax.inject.Inject;
-
 
 /**
  * Created by hafsal on 10/25/17.
@@ -25,11 +22,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         App.getAppComponent().inject(this);
         setTheme(R.style.AppTheme);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initFragment(new MainFragment());
-
+        initFragment(MainFragment.newInstance());
 
     }
 

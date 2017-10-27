@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.hafsalrahman.ssstest">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
-    <uses-permission  android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -16,8 +16,9 @@
         <activity
             android:name=".features.main.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/SplashTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
