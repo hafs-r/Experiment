@@ -14,7 +14,7 @@ import io.reactivex.Single;
 
 public interface AppDataStore {
 
-    Single<UsersResponse> getUsers();
+    Single getUsers();
 
 
 }

@@ -2,7 +2,7 @@ package com.hafsalrahman.ssstest.data.local;
 
 import com.hafsalrahman.ssstest.data.AppDataStore;
 import com.hafsalrahman.ssstest.data.local.models.User;
-import com.hafsalrahman.ssstest.data.remote.UsersResponse;
+
 
 import java.util.List;
 
@@ -22,12 +22,17 @@ public class AppLocalDataStore implements AppDataStore {
     }
 
     @Override
-    public Single<UsersResponse> getUsers() {
+    public Single<List<User>> getUsers() {
        return dataBaseSource.getUserDao().getUsers();
     }
 
     public void insertUsers(List<User> users) {
        //implement background process
             dataBaseSource.getUserDao().insertMultipleListRecord(users);
+    }
+
+    public void deleteAll() {
+        //implement background process
+        dataBaseSource.getUserDao().deleteAll();
     }
 }

@@ -1,8 +1,8 @@
 package com.hafsalrahman.ssstest.data.remote;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import com.hafsalrahman.ssstest.data.local.models.User;
+
+import com.hafsalrahman.ssstest.data.remote.models.Info;
+import com.hafsalrahman.ssstest.data.remote.models.User;
 
 import java.util.List;
 
@@ -11,18 +11,17 @@ import java.util.List;
  */
 
 public class UsersResponse {
-    @SerializedName("total")
-    @Expose
-    public int total;
-    @SerializedName("results")
-    @Expose
-    public List<User> users;
 
-    public int getTotal() {
-        return total;
+    public final List<User> results;
+
+    public final Info info;
+
+    public UsersResponse(List<User> results, Info info) {
+        this.results = results;
+        this.info = info;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
+
+
+
 }

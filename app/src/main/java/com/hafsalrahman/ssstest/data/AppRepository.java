@@ -1,17 +1,20 @@
 package com.hafsalrahman.ssstest.data;
 
-import com.hafsalrahman.ssstest.App;
+import android.util.Log;
+
 import com.hafsalrahman.ssstest.data.local.AppLocalDataStore;
+import com.hafsalrahman.ssstest.data.local.models.User;
 import com.hafsalrahman.ssstest.data.remote.AppRemoteDataStore;
 import com.hafsalrahman.ssstest.data.remote.UsersResponse;
 import com.hafsalrahman.ssstest.utils.NetUtils;
+import com.hafsalrahman.ssstest.utils.UserUtil;
 
-import javax.inject.Inject;
+import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.functions.Function;
 
 /**
  * Created by hafsal on 10/24/17.
@@ -20,40 +23,48 @@ import io.reactivex.schedulers.Schedulers;
 public class AppRepository implements AppDataStore {
 
 
-    @Inject
-    public AppRemoteDataStore mAppRemoteDataStore;
+    private AppRemoteDataStore mAppRemoteDataStore;
 
-    @Inject
-    public AppLocalDataStore mAppLocalDataStore;
+    private AppLocalDataStore mAppLocalDataStore;
 
-    @Inject
-    public NetUtils mNetUtil;
+    private NetUtils mNetUtil;
 
 
-    public AppRepository() {
-        App.getAppComponent().inject(this);
+    public AppRepository(AppRemoteDataStore pAppRemoteDataStore, AppLocalDataStore pAppLocalDataStore, NetUtils pNetUtil) {
+        this.mAppRemoteDataStore = pAppRemoteDataStore;
+        this.mAppLocalDataStore = pAppLocalDataStore;
+        this.mNetUtil = pNetUtil;
     }
 
     @Override
-    public Single<UsersResponse> getUsers() {
+    public Single<List<User>> getUsers() {
+        Single<List<User>> response = null;
 
-        Single<UsersResponse> singleResponse = null;
-        if (mNetUtil.isNetworkAvailable()) {//check network availability and change data source
-
-            singleResponse = mAppRemoteDataStore.getUsers();
-            singleResponse.subscribeOn(Schedulers.io());
-            singleResponse.subscribe(new Consumer<UsersResponse>() {
-                @Override
-                public void accept(@NonNull UsersResponse usersResponse) throws Exception {
-                    mAppLocalDataStore.insertUsers(usersResponse.getUsers());
-                }
-            });
+        if (mNetUtil.isNetworkAvailable()) {
+            response = mAppRemoteDataStore.getUsers()
+                    .map(new Function<UsersResponse, List<com.hafsalrahman.ssstest.data.local.models.User>>() {
+                        @Override
+                        public List<com.hafsalrahman.ssstest.data.local.models.User> apply(UsersResponse apiUsers) throws Exception {
+                            return UserUtil.convertApiUserListToUserList(apiUsers);
+                        };
+                    }).doOnSuccess(new Consumer<List<User>>() {
+                        @Override
+                        public void accept(@NonNull List<User> users)  {
+                            try {
+                                mAppLocalDataStore.insertUsers(users);
+                            }catch (Exception e)
+                            {
+                                Log.e(e.getMessage(),"");
+                            }
+                        }
+                    });
 
         } else {
-            singleResponse = mAppLocalDataStore.getUsers();
+            response = mAppLocalDataStore.getUsers();
         }
 
-        return singleResponse;
+
+        return response;
 
     }
 }
