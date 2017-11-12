@@ -1,10 +1,10 @@
 package com.hafsalrahman.ssstest.data;
 
-import android.util.Log;
-
 import com.hafsalrahman.ssstest.data.local.AppLocalDataStore;
 import com.hafsalrahman.ssstest.data.local.models.LocalUser;
 import com.hafsalrahman.ssstest.data.remote.AppRemoteDataStore;
+import com.hafsalrahman.ssstest.data.remote.ErrorManager;
+import com.hafsalrahman.ssstest.data.remote.RemoteResponseWrapper;
 import com.hafsalrahman.ssstest.data.remote.UsersResponse;
 import com.hafsalrahman.ssstest.utils.NetUtils;
 import com.hafsalrahman.ssstest.utils.UserUtil;
@@ -12,9 +12,7 @@ import com.hafsalrahman.ssstest.utils.UserUtil;
 import java.util.List;
 
 import io.reactivex.Single;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
+import io.reactivex.SingleObserver;
 
 /**
  * Created by hafsal on 10/24/17.
@@ -23,10 +21,9 @@ import io.reactivex.functions.Function;
 public class AppRepository implements AppDataStore {
 
 
+    public ErrorManager mErrorManager;
     private AppRemoteDataStore mAppRemoteDataStore;
-
     private AppLocalDataStore mAppLocalDataStore;
-
     private NetUtils mNetUtil;
 
 
@@ -41,23 +38,31 @@ public class AppRepository implements AppDataStore {
         Single<List<LocalUser>> response = null;
 
         if (mNetUtil.isNetworkAvailable()) {
-            response = mAppRemoteDataStore.getUsers()
-                    .map(new Function<UsersResponse, List<LocalUser>>() {
+
+            response = new Single<List<LocalUser>>() {
+                @Override
+                protected void subscribeActual(final SingleObserver<? super List<LocalUser>> observer) {
+                    mAppRemoteDataStore.getUsers().subscribe(new RemoteResponseWrapper<UsersResponse>() {
                         @Override
-                        public List<LocalUser> apply(UsersResponse apiUsers) throws Exception {
-                            return UserUtil.convertApiUserListToUserList(apiUsers);
+                        public ErrorManager getErrorManager() {
+                            return mErrorManager;
                         }
-                    }).doOnSuccess(new Consumer<List<LocalUser>>() {
+
                         @Override
-                        public void accept(@NonNull List<LocalUser> localUsers) {
-                            try {
-                                mAppLocalDataStore.insertUsers(localUsers);
-                            } catch (Exception e) {
-                                Log.e(e.getMessage(), "");
-                            }
+                        public void onDataSuccess(UsersResponse usersResponse) {
+
+                            mAppLocalDataStore.insertUsers(UserUtil.convertApiUserListToUserList(usersResponse));
+                            observer.onSuccess(UserUtil.convertApiUserListToUserList(usersResponse));
+                        }
+
+                        @Override
+                        public void onDataError(String message) {
+                            observer.onError(new Throwable(message));
                         }
                     });
 
+                }
+            };
         } else {
             response = mAppLocalDataStore.getUsers();
         }

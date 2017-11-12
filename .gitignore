@@ -8,4 +8,6 @@
 .externalNativeBuild
 instapk.log*
 /instapk.properties
-app/libs/
+
+
+.idea/instapk.xml

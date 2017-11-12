@@ -14,6 +14,7 @@ import com.hafsalrahman.ssstest.data.AppRepository;
 import com.hafsalrahman.ssstest.data.local.AppLocalDataStore;
 import com.hafsalrahman.ssstest.data.local.DataBaseSource;
 import com.hafsalrahman.ssstest.data.remote.AppRemoteDataStore;
+import com.hafsalrahman.ssstest.data.remote.ErrorManager;
 import com.hafsalrahman.ssstest.utils.NetUtils;
 
 import java.security.cert.CertificateException;
@@ -42,6 +43,12 @@ public class DataModule {
     @Singleton
     SharedPreferences providesSharedPreferences(Application application) {
         return PreferenceManager.getDefaultSharedPreferences(application);
+    }
+
+    @Provides
+    @Singleton
+    ErrorManager provideErrorManager(Application application) {
+        return new ErrorManager(application);
     }
 
     @Provides

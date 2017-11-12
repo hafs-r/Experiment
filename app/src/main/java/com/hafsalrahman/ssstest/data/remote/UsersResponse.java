@@ -10,7 +10,7 @@ import java.util.List;
  * Created by hafsal on 10/24/17.
  */
 
-public class UsersResponse {
+public class UsersResponse extends BaseResponse {
 
     public final List<RemoteUser> results;
 
@@ -19,6 +19,11 @@ public class UsersResponse {
     public UsersResponse(List<RemoteUser> results, Info info) {
         this.results = results;
         this.info = info;
+    }
+
+    @Override
+    public Info getInfo() {
+        return info;
     }
 
 

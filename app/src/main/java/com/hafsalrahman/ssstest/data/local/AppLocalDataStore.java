@@ -2,9 +2,7 @@ package com.hafsalrahman.ssstest.data.local;
 
 import com.hafsalrahman.ssstest.data.AppDataStore;
 import com.hafsalrahman.ssstest.data.local.models.LocalUser;
-
 import java.util.List;
-
 import io.reactivex.Single;
 
 /**

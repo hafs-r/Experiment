@@ -106,5 +106,10 @@ public class MainFragment extends Fragment implements MainContract.View {
         snackbar.show();
     }
 
+    @Override
+    public void onDestroyView() {
+        mainPresenter.unsubscribe();
+        super.onDestroyView();
 
+    }
 }
