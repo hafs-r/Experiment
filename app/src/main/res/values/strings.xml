@@ -3,4 +3,5 @@
     <string name="title_activity_main">@string/app_name</string>
 
     <string name="no_users_available">Users list is empty</string>
+    <string name="network_error">offline, but you can still use the app.</string>
 </resources>

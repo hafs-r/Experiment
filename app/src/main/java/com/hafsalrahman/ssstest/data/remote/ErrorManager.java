@@ -20,7 +20,7 @@ public class ErrorManager {
     public String parseError(Throwable throwable)
     {
         //all errors can be handled here
-        String message=mApplication.getString(R.string.no_users_available);
+        String message=mApplication.getString(R.string.network_error);
         if(throwable instanceof NetworkErrorException)
         {
 
